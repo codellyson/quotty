@@ -7,20 +7,69 @@ import webpackLogo from '@/images/webpack-logo.svg'
 // Test import of styles
 import '@/styles/index.scss'
 
-// Appending to the DOM
-const logo = document.createElement('img')
-logo.src = webpackLogo
+import { navBarFunc } from "./js/miscallenous.es6";
+import UI from "./js/UI";
+import App from "./js/app";
 
-const heading = document.createElement('h1')
-heading.textContent = example()
 
-// Test a background image url in CSS
-const imageBackground = document.createElement('div')
-imageBackground.classList.add('image')
+document.addEventListener("DOMContentLoaded", () => {
+  const data = new UI().loadDefaults();
+  const local_data = JSON.parse(data);
+  // NavBar
+  navBarFunc();
+  // setBg from localStorage
 
-// Test a public folder asset
-const imagePublic = document.createElement('img')
-imagePublic.src = '/assets/example.png'
+  UI.backgroundColor(local_data[0]);
+  UI.textColor(local_data[1]);
 
-const app = document.querySelector('#root')
-app.append(logo, heading, imageBackground, imagePublic)
+  // Export Image Button
+  const screenShotBtn = document.getElementById("screenshot-btn");
+  screenShotBtn.addEventListener("click", (event) => {
+    const node = document.getElementById("quote-bg");
+    UI.screenShot(node);
+  });
+
+  //  Persisit color  and set color in the LocalStorage
+  document.addEventListener("change", (e) => {
+    if (e.target.matches("#bgcolor-btn")) {
+      UI.backgroundColor(e.target.value);
+      const newUI = new UI(e.target.value);
+      newUI.persistColorToLocaleStorage();
+    } else if (e.target.matches("#textcolor-btn")) {
+      UI.textColor(e.target.value);
+      const newUI = new UI("_", "_", e.target.value);
+      console.log(e.target.value);
+      newUI.persistTextColorToLocalStorage();
+    } else if (e.target.matches("#board-width")) {
+      UI.resetAndPersistWidthAndHeight(e.target.value, "");
+    } else if (e.target.matches("#board-height")) {
+      UI.resetAndPersistWidthAndHeight("", e.target.value);
+    } else if (e.target.matches("#next-photo-btn")) {
+      App.fetchPhotos(e.target.value);
+    } else if (e.target.matches(".font-input")) {
+      const currentSize = e.target.value;
+      UI.setFontSize(currentSize);
+    }
+  });
+
+  // set hght and width
+  document.addEventListener("click", (e) => {
+    if (e.target.matches("#bgimage-btn")) {
+      App.fetchPhotos(1);
+    } else if (e.target.matches(".font-style")) {
+      const fontStyles = e.target.textContent.trim().toLowerCase();
+      UI.setFontStyles(fontStyles);
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (e.target.matches(".select-photos")) {
+      const imgUrl = e.target.getAttribute("src");
+      App.selectAPhoto(imgUrl);
+    } else if (e.target.matches("#trigger-btn")) {
+      document.querySelector(".dropdown").classList.toggle("is-active");
+    } else {
+      return false;
+    }
+  });
+});

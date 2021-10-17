@@ -9,6 +9,256 @@
   </head>
 
   <body>
-    <div id="root"></div>
+    <nav class="navbar" role="navigation" aria-label="main navigation">
+      <div class="container">
+       <div class="navbar-brand">
+         <a class="navbar-item" href="index.html">
+           <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28"> -->
+               <h1 class="title is-2 is-uppercase">Quotty</h2>
+         </a>
+     
+         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+           <span aria-hidden="true"></span>
+           <span aria-hidden="true"></span>
+           <span aria-hidden="true"></span>
+         </a>
+       </div>
+     
+       <div id="navbarBasicExample" class="navbar-menu">
+         <div class="navbar-start">
+           <a class="navbar-item">
+             Home
+           </a>
+     
+           <a class="navbar-item">
+             Documentation
+           </a>
+     
+         
+         </div>
+     
+         <div class="navbar-end">
+           <div class="navbar-item">
+             <div class="buttons">
+               <a class="button is-primary">
+                 <strong>Sign up</strong>
+               </a>
+               <a class="button is-light">
+                 Log in
+               </a>
+             </div>
+           </div>
+         </div>
+       </div>
+      </div>
+     </nav>
+  
+    <div id="app" class="columns ">
+      <aside class="menu is-two-fifths is-fixed-bottom">
+        <p class="menu-label">
+          Edit Background
+        </p>
+        <ul class="menu-list">
+          <li class="py-3"> 
+            <button class="button is-primary " id="bgimage-btn">
+            Change Background Image
+          </button>
+        </li>
+          
+          <li> 
+            <div
+            class=""
+          >
+            <label for="bgcolor-btn" class="button is-primary"
+              >Change Background Color</label
+            >
+            <input type="color" class="" id="bgcolor-btn" hidden="hidden" />
+          </div>
+        </li>
+        </ul>
+        <p class="menu-label">
+          Edit Text
+        </p>
+        <ul class="menu-list">
+          <li><div
+            class=""
+          >
+            <label for="textcolor-btn" class="button is-primary"
+              >Change Text Color</label
+            >
+            <input type="color" class="" id="textcolor-btn" hidden="hidden" />
+          </div> </li>
+    
+          <li class="py-3">
+            <p class="menu-label">Change Font Style</p>
+            <div class="dropdown">
+              <div class="dropdown-trigger">
+                <button class="button" id="trigger-btn" aria-haspopup="true" aria-controls="dropdown-menu">
+                  <span>Choose font</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-down" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                  <a href="#" class="dropdown-item font-style" style="font-family: Helvetica; font-size: 24px;">
+                    Helvetica
+                  </a>
+                  <a class="dropdown-item font-style" style="font-family:'acknowledgement'; font-size: 24px;">
+                    Acknowledgement
+                  </a>
+                  <a href="#" class="dropdown-item font-style" style="font-family:cursive; font-size: 24px;">
+                   Cursive
+                  </a>
+                  <a href="#" class="dropdown-item font-style" style="font-family:waltographUI; font-size: 24px;">
+                    WaltographUI
+                  </a>
+                  <a href="#" class="dropdown-item font-style" style="font-family: Tahoma; font-size: 24px;">
+                   Tahoma
+                  </a>
+                  <a href="#" class="dropdown-item font-style" style="font-family: leaguespartan-bold-webfont; font-size: 24px;">
+                    Leaguespartan-bold-webfont
+                  </a>
+                  <a href="#" class="dropdown-item font-style" style="font-family:Alatsi-Regular; font-size: 24px;">
+                    Alatsi-Regular
+                  </a> 
+                  <a href="#" class="dropdown-item font-style" style="font-family: alegreyasanssc-bold; font-size: 24px;">
+                    Alegreyasanssc-Bold
+                  </a>
+                   <a href="#" class="dropdown-item font-style" style="font-family: fortssh_-webfont; font-size: 24px;">
+                    Fortssh_-webfont
+                  </a>
+                  <hr class="dropdown-divider">
+                  <a href="#" class="dropdown-item font-style">
+                    With a divider
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <p class="menu-label">
+          Change Font Size
+        </p>
+        <ul class="menu-list my-4">
+          <li class="select">
+            <select class="input font-input">
+              <option value="14">14px</option>
+              <option value="16">16px</option>
+              <option value="18">18px</option>
+              <option value="20">20px</option>
+              <option value="22">22px</option>
+              <option value="24">24px</option>
+              <option value="26">26px</option>
+              <option value="28">28px</option>
+              <option value="30">30px</option>
+              <option value="32">32px</option>
+              <option value="34">34px</option>
+              <option value="36">36px</option>
+              <option value="38">38px</option>
+              <option value="40">40px</option>
+              <option value="42">42px</option>
+              <option value="44">44px</option>
+              <option value="46">46px</option>
+              <option value="48">48px</option>
+              <option value="50">50px</option>
+              <option value="52">52px</option>
+              <option value="54">54px</option>
+              <option value="56">56px</option>
+              <option value="58">58px</option>
+              <option value="60">60px</option>
+              
+            </select>
+          </li>
+        </ul>
+    
+         
+    
+        <p class="menu-label">
+          Custom Dimensions
+        </p>
+        <ul class="menu-list my-4">
+          <div
+          class="
+            control
+          
+            is-flex
+            is-flex-direction-column
+            is-align-items-center
+            is-flex-wrap-wrap
+          "
+        >
+    
+          <input type="number" step="5"  id="board-width"
+          class="input is-small"  min="300">
+          <span class="">&times;</span>
+    
+        
+        <input type="number" step="5"  id="board-height"
+          class="input is-small" min="300">
+        </div>
+        </ul>
+        <ul class="menu-list">
+          <li> <button class="button is-primary py-3 mr-2" id="screenshot-btn">
+            Export Quote as PNG
+          </button></li>
+        </ul>
+      </aside>
+    
+    
+      <div class="column">
+    
+          
+            <section
+              class="
+                section
+                is-medium
+                is-flex
+                is-flex-direction-column
+                is-align-items-center
+                is-justify-content-center
+              "
+            >
+              <div class="box" id="quote-bg">
+                <div class="qt-overlay"></div>
+                <div
+                  class="
+                    card
+                    is-medium
+                    is-flex
+                    is-flex-direction-column
+                    is-align-items-center
+                    is-justify-content-center
+                  "
+                >
+                  <div class="card-content">
+                    <div class="content" id="text-container" contenteditable="true">
+                      Lorem ipsum leo risus, porta ac consectetur ac, vestibulum
+                      at eros. Donec id elit non mi porta gravida at eget metus.
+                      Cum sociis natoque penatibus et magnis dis parturient
+                      montes, nascetur ridiculus mus. Cras mattis consectetur
+                      purus sit amet fermentum.
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+              <div id="output" class="modal">
+                <div class="modal-background"></div>
+                <div class="modal-content is-flex is-flex-direction-row is-justify-content-center is-flex-wrap-wrap">
+                
+                </div>
+                <button class="modal-close is-large" aria-label="close">
+                  close
+                </button>
+              </div>
+            </section>
+          </div>
+        
+      </div></section>
+      </div>
+       
+    </div>
   </body>
 </html>
