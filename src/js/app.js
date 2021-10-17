@@ -1,51 +1,107 @@
-const unsplashAccessKey = "uWgEsu7J_S1wB1CZ_nm1GrLwsI71A-cdvMFoRiy21nE";
-const unsplashUrl = "https://api.unsplash.com/photos?orientation=landscape&per_page=30";
+/**
+@Author {Isiaka Lukman Bamidele}
+@Copyright {Dellyson Inc.}
+*/
+const unsplashAccessKey = 'uWgEsu7J_S1wB1CZ_nm1GrLwsI71A-cdvMFoRiy21nE'
+const unsplashUrl = 'https://api.unsplash.com/photos?orientation=landscape&per_page=30'
+import UI from './UI'
 class APP {
-  static loading;
+  constructor(bgColor, quoteText, textColor, quoteImg, fontStyle) {
+    this.bgColor = bgColor
+    this.quoteText = quoteText
+    this.textColor = textColor
+    this.fontStyle = fontStyle
+    this.quoteImg = quoteImg
+    this.quoteData = []
+  }
   static fetchPhotos(page) {
-    fetch(unsplashUrl +"&"+ "page=" + page, {
-      method: "GET", // *GET, POST, PUT, DELETE, etc.
+    fetch(unsplashUrl + '&' + 'page=' + page, {
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
       headers: {
         Authorization: `Client-ID ${unsplashAccessKey} `,
       },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
-
-        this.loading = false;
-        document.querySelector(".modal").classList.add("is-active");
-        this.renderPhotos(data);
-        document.getElementById("next-photo-btn").value = page;
+        this.loading = false
+        document.querySelector('.modal').classList.add('is-active')
+        UI.renderPhotos(data)
+        document.getElementById('next-photo-btn').value = page
       })
       .catch((err) => {
-        this.loading = false;
-        console.error(err);
-      });
+        this.loading = false
+        console.error(err)
+      })
   }
 
-  static renderPhotos(photos) {
-    const photolist = photos.map((photo) => {
-      return `
-          <img class="photos select-photos mr-2" style="width:50%" src=${photo.urls.regular} />
-      `;
-    });
-    document.querySelector(".modal-content").innerHTML = ` ${photolist.join(
-      ""
-    )} 
-      <div class="control">
-      <input class="input is-small is-primary" id="next-photo-btn" type="number"/>
-      <p>page</p>
-      </div>
-      </div>
-      `;
-    document.querySelector(".modal-close").addEventListener("click", () => {
-      document.querySelector(".modal").classList.remove("is-active");
-    });
+  persistColorToLocaleStorage() {
+    if (this.color !== '') {
+      const local_data = JSON.parse(new UI().loadDefaults())
+      this.quoteData[0] = this.bgColor
+      this.quoteData[1] = local_data[1]
+      this.quoteData[2] = local_data[2]
+      this.quoteData[3] = local_data[3]
+      this.quoteData[4] = local_data[4]
+    }
+    if (localStorage.getItem('quote-generator')) {
+      localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
+    }
   }
-  static selectAPhoto(photo) {
-    const $quoteBg = document.getElementById("quote-bg");
-    $quoteBg.style.backgroundImage=`url(${photo})`
+
+
+  persistTextColorToLocalStorage() {
+    const local_data = JSON.parse(new UI().loadDefaults())
+    if (this.textColor !== '' && typeof this.textColor !== '') {
+      this.quoteData[0] = local_data[0]
+      this.quoteData[1] = this.textColor
+      this.quoteData[2] = local_data[2]
+      this.quoteData[3] = local_data[3]
+      this.quoteData[4] = local_data[4]
+      if (localStorage.getItem('quote-generator')) {
+        localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
+      }
+    }
+  }
+  persistQuoteTextToLocalStorage() {
+    if (this.quoteText !== '') {
+      const local_data = JSON.parse(new UI().loadDefaults())
+      this.quoteData[0] = local_data[0]
+      this.quoteData[1] = local_data[1]
+      this.quoteData[2] = this.quoteText
+      this.quoteData[3] = local_data[3]
+      this.quoteData[4] = local_data[4]
+
+      if (localStorage.getItem('quote-generator')) {
+        localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
+      }
+    }
+  }
+  persistImageToLocalStorage() {
+    if (this.quoteImg !== '') {
+      const local_data = JSON.parse(new UI().loadDefaults())
+      this.quoteData[0] = local_data[0]
+      this.quoteData[1] = local_data[1]
+      this.quoteData[2] = local_data[2]
+      this.quoteData[3] = this.quoteImg
+      this.quoteData[4] = local_data[4]
+      if (localStorage.getItem('quote-generator')) {
+        localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
+      }
+    }
+  }
+  persistFontStyleToLocalStorage() {
+    console.log(this.fontStyle)
+    if (!this.fontStyle !== '') {
+      const local_data = JSON.parse(new UI().loadDefaults())
+      this.quoteData[0] = local_data[0]
+      this.quoteData[1] = local_data[1]
+      this.quoteData[2] = local_data[2]
+      this.quoteData[3] = local_data[3]
+      this.quoteData[4] = this.fontStyle
+    }
+    if (localStorage.getItem('quote-generator')) {
+      localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
+    }
   }
 }
-export default APP;
+export default APP

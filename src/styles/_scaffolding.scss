@@ -1,18 +1,26 @@
-
 #quote-bg {
   transition: all 0.6s;
   padding: 2rem;
-  width: 400px;
-  height: max-content;
+  width: 100%;
+  height: 50ch;
   background-size: cover;
   background-repeat: no-repeat;
   background-origin: border-box;
   background-position: center center;
   position: relative;
+  box-shadow: none !important;
+  #watermark{
+    font-size: 10px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.562);
+    padding:3px;
+  }
   .qt-overlay {
     height: 100%;
     width: 100%;
-    background: rgba(0, 0, 0, 0.459);
+    background: rgba(0, 0, 0, 0.411);
     position: absolute;
     top: 0;
     left: 0;
@@ -20,13 +28,14 @@
 }
 .card {
   height: 100%;
-  .card-content{
+  background-color: transparent !important;
+  box-shadow: none !important;
+  .card-content {
     position: relative;
     z-index: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
   }
 }
 #output {
@@ -41,8 +50,46 @@
   top: 46%;
   right: 12%;
 }
-aside{
-  padding-left: 2rem;
-  padding-top: 6rem;
+aside {
+  // padding-left: 2rem;
+  padding: 2rem 2rem 2rem 2rem;
+  display: none !important;
+  input#board-height,
+  input#board-width {
+    width: 100px;
+  }
+  &.is-viewed{
+    position: fixed;
+    display: block !important;
+    z-index: 2;
+    background-color: #2c2c2c;
+    width: 70%;
+    bottom: 2%;
+  }
+}
+.select-photos {
+  transition: all 0.4s;
+  cursor: pointer;
+  &:hover {
+    border: solid 4px rgb(5, 145, 5);
+  }
+}
+#tool-toggle {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  z-index: 3;
+  
 }
 
+@media (min-width: 768px) {
+  aside {
+    display: block !important;
+  }
+  #quote-bg {
+    width: 50%;
+  }
+  #tool-toggle{
+    display: none;
+  }
+}

@@ -4,15 +4,14 @@
 */
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
+import App from './app'
 class UI {
   constructor(bgColor, quoteText, textColor) {
     this.bgColor = bgColor;
     this.textColor = textColor;
     this.quoteText = quoteText;
-    this.quoteData = [];
   }
   loadDefaults() {
-    console.log(this.quoteData);
     if (localStorage.getItem("quote-generator")) {
       return localStorage.getItem("quote-generator");
     } else {
@@ -32,45 +31,14 @@ class UI {
     if (color !== "") {
       $quoteBg.style.backgroundColor = color;
     }
-
-    console.log(color);
   }
 
   static textColor(color) {
-    const $textContainer = document.getElementById("text-container");
-    if (color !== " ") $textContainer.style.color = color;
+    const $textContainer = document.querySelector("#quote-bg .card .card-content");
+    if (color !== " ") {$textContainer.style.color = color;}
   }
-  persistColorToLocaleStorage() {
-    if (this.color !== "") {
-      const local_data = JSON.parse(this.loadDefaults());
-      this.quoteData[0] = this.bgColor;
-      this.quoteData[1] = local_data[1];
-    }
-    if (localStorage.getItem("quote-generator")) {
-      localStorage.setItem("quote-generator", JSON.stringify(this.quoteData));
-    }
-  }
-
-  persistTextToLocaleStorage() {
-    if (this.quoteText !== "" && typeof this.quoteText !== "")
-      this.quoteData.splice(2, 1, this.quoteText);
-    if (localStorage.getItem("quote-generator")) {
-      localStorage.setItem("quote-generator", JSON.stringify(quoteData));
-    }
-  }
-
-  persistTextColorToLocalStorage() {
-    const local_data = JSON.parse(this.loadDefaults());
-    if (this.textColor !== "" && typeof this.textColor !== "") {
-      this.quoteData[0] = local_data[0];
-      this.quoteData[1] = this.textColor;
-      if (localStorage.getItem("quote-generator")) {
-        localStorage.setItem("quote-generator", JSON.stringify(this.quoteData));
-      }
-    }
-  }
-
-  static resetAndPersistWidthAndHeight(wt = 400, ht = 400) {
+  
+  static resetAndPersistWidthAndHeight(wt , ht) {
     const $quoteBg = document.getElementById("quote-bg");
     document.getElementById("board-height").value = ht;
     document.getElementById("board-width").value = wt;
@@ -81,13 +49,42 @@ class UI {
   static setFontStyles(fontStyles) {
     const $content = document.querySelector("#quote-bg .card .card-content");
     $content.style.fontFamily = fontStyles;
-    $content.style.fontSize = fontSize;
-  }
+    }
   static setFontSize(fontSize) {
 
     const $content = document.querySelector("#quote-bg .card .card-content");
     $content.style.fontSize = fontSize + "px";
     document.querySelector(".font-input").value=fontSize
+  }
+
+  static setQuoteText (text){
+    document.querySelector("#quote-bg .card .card-content").textContent=text
+  }
+  static renderPhotos(photos) {
+    const photolist = photos.map((photo) => {
+      return `
+          <img class="photos select-photos mr-2" style="width:50%" src=${photo.urls.regular} />
+      `;
+    });
+    document.querySelector(".modal-content").innerHTML = ` ${photolist.join(
+      ""
+    )} 
+      <div class="control">
+      <input class="input is-small is-primary" id="next-photo-btn" type="number"/>
+      <p>page</p>
+      </div>
+      </div>
+      `;
+    document.querySelector(".modal-close").addEventListener("click", () => {
+      document.querySelector(".modal").classList.remove("is-active");
+    });
+  }
+  static selectAPhoto(photo) {
+    const appInstance = new App("_","_","_",photo,"_");
+    appInstance.persistImageToLocalStorage()
+    const $quoteBg = document.getElementById("quote-bg");
+    $quoteBg.style.backgroundImage=`url(${photo})`
+
   }
 }
 
