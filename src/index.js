@@ -4,9 +4,8 @@ import '@/styles/index.scss'
 
 import { navBarFunc } from './js/miscallenous.es6'
 
-
 function closeSideNav() {
-  document.querySelector("aside").classList.remove("is-viewed")
+  document.querySelector('aside').classList.remove('is-viewed')
 }
 document.addEventListener('DOMContentLoaded', () => {
   const data = new UI().loadDefaults()
@@ -15,10 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(local_data)
     // setBg from localStorage
     UI.backgroundColor(local_data[0])
-    UI.setQuoteText(local_data[2] || "Click here to edit")
     UI.textColor(local_data[1])
-    UI.selectAPhoto(local_data[3])
-    UI.setFontStyles(local_data[4])
+    UI.selectAPhoto(local_data[2])
+    UI.setFontStyles(local_data[3])
   }
 
   // NavBar
@@ -40,12 +38,11 @@ document.addEventListener('DOMContentLoaded', () => {
       closeSideNav()
     } else if (e.target.matches('#textcolor-btn')) {
       UI.textColor(e.target.value)
-      const appInstance = new App('_', '_', e.target.value)
+      const appInstance = new App('_', e.target.value, '_', '_')
       appInstance.persistTextColorToLocalStorage()
       closeSideNav()
     } else if (e.target.matches('#board-width')) {
       UI.resetAndPersistWidthAndHeight(e.target.value, '')
-    
     } else if (e.target.matches('#board-height')) {
       UI.resetAndPersistWidthAndHeight('', e.target.value)
     } else if (e.target.matches('#next-photo-btn')) {
@@ -64,9 +61,9 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.target.matches('.font-style')) {
       const fontStyles = e.target.textContent.trim().toLowerCase()
       UI.setFontStyles(fontStyles)
-      const appInstance = new App('_', '_', '_', '_', fontStyles)
+      const appInstance = new App('_', '_', '_', fontStyles)
       appInstance.persistFontStyleToLocalStorage()
-      closeSideNav();
+      closeSideNav()
       document.querySelector('.dropdown').classList.toggle('is-active')
     }
   })
@@ -95,6 +92,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const asideElement = document.querySelector('aside')
   const toggleSideBarBtn = document.getElementById('tool-toggle')
   toggleSideBarBtn.addEventListener('click', function (e) {
-    asideElement.classList.toggle('is-viewed')
+    if (asideElement.classList.contains('is-viewed')) {
+      asideElement.classList.remove('is-viewed')
+    } else {
+      asideElement.classList.add('is-viewed')
+    }
   })
 })

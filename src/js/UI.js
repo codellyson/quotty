@@ -6,11 +6,6 @@ import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 import App from './app'
 class UI {
-  constructor(bgColor, quoteText, textColor) {
-    this.bgColor = bgColor;
-    this.textColor = textColor;
-    this.quoteText = quoteText;
-  }
   loadDefaults() {
     if (localStorage.getItem("quote-generator")) {
       return localStorage.getItem("quote-generator");
@@ -56,9 +51,7 @@ class UI {
     document.querySelector(".font-input").value=fontSize
   }
 
-  static setQuoteText (text){
-    document.querySelector("#quote-bg .card .card-content").textContent=text
-  }
+  
   static renderPhotos(photos) {
     const photolist = photos.map((photo) => {
       return `
@@ -79,7 +72,7 @@ class UI {
     });
   }
   static selectAPhoto(photo) {
-    const appInstance = new App("_","_","_",photo,"_");
+    const appInstance = new App("_","_",photo,"_");
     appInstance.persistImageToLocalStorage()
     const $quoteBg = document.getElementById("quote-bg");
     $quoteBg.style.background=`url(${photo})`
