@@ -51,7 +51,6 @@ class UI {
     $content.style.fontFamily = fontStyles;
     }
   static setFontSize(fontSize) {
-
     const $content = document.querySelector("#quote-bg .card .card-content");
     $content.style.fontSize = fontSize + "px";
     document.querySelector(".font-input").value=fontSize
@@ -75,7 +74,7 @@ class UI {
       </div>
       </div>
       `;
-    document.querySelector(".modal-close").addEventListener("click", () => {
+    document.querySelector(".modal").addEventListener("click", () => {
       document.querySelector(".modal").classList.remove("is-active");
     });
   }

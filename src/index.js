@@ -4,6 +4,10 @@ import '@/styles/index.scss'
 
 import { navBarFunc } from './js/miscallenous.es6'
 
+
+function closeSideNav() {
+  document.querySelector("aside").classList.remove("is-viewed")
+}
 document.addEventListener('DOMContentLoaded', () => {
   const data = new UI().loadDefaults()
   if (data) {
@@ -33,10 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
       UI.backgroundColor(e.target.value)
       const appInstance = new App(e.target.value)
       appInstance.persistColorToLocaleStorage()
+      closeSideNav()
     } else if (e.target.matches('#textcolor-btn')) {
       UI.textColor(e.target.value)
       const appInstance = new App('_', '_', e.target.value)
       appInstance.persistTextColorToLocalStorage()
+      closeSideNav()
     } else if (e.target.matches('#board-width')) {
       UI.resetAndPersistWidthAndHeight(e.target.value, '')
     } else if (e.target.matches('#board-height')) {
@@ -46,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (e.target.matches('.font-input')) {
       const currentSize = e.target.value
       UI.setFontSize(currentSize)
+      closeSideNav()
     }
   })
 
@@ -58,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
       UI.setFontStyles(fontStyles)
       const appInstance = new App('_', '_', '_', '_', fontStyles)
       appInstance.persistFontStyleToLocalStorage()
+      closeSideNav();
       document.querySelector('.dropdown').classList.toggle('is-active')
     }
   })
@@ -66,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target.matches('.select-photos')) {
       const imgUrl = e.target.getAttribute('src')
       UI.selectAPhoto(imgUrl)
-
-      document.querySelector('.modal').classList.remove('is-active')
+      // document.querySelector('.modal').classList.remove('is-active')
+      closeSideNav()
     } else if (e.target.matches('#trigger-btn')) {
       document.querySelector('.dropdown').classList.toggle('is-active')
     } else {
