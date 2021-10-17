@@ -1,3 +1,4 @@
+'use strict'
 /**
 @Author {Isiaka Lukman Bamidele}
 @Copyright {Dellyson Inc.}
@@ -11,7 +12,7 @@ class APP {
     this.textColor = textColor
     this.fontStyle = fontStyle
     this.quoteImg = quoteImg
-    this.quoteData = []
+    this.quoteData = ["#000000","#ffffff","acknowledgement", null]
   }
   static fetchPhotos(page) {
     fetch(unsplashUrl + '&' + 'page=' + page, {

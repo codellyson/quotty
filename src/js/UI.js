@@ -1,3 +1,4 @@
+'use strict'
 /**
 @Author {Isiaka Lukman Bamidele}
 @Copyright {Dellyson Inc.}
@@ -5,7 +6,7 @@
 import domtoimage from "dom-to-image";
 import { saveAs } from "file-saver";
 import App from './app'
-class UI {
+class UI extends App {
   loadDefaults() {
     if (localStorage.getItem("quote-generator")) {
       return localStorage.getItem("quote-generator");

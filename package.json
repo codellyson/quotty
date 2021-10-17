@@ -1,9 +1,9 @@
 {
-  "name": "webpack-boilerplate",
+  "name": "quotty",
   "version": "3.0.0",
-  "description": "Sensible webpack 5 boilerplate using Babel and PostCSS.",
+  "description": "A quote generator web app",
   "main": "index.js",
-  "author": "Tania Rascia",
+  "author": "Isiaka Lukman Bamidele",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=development webpack serve --config config/webpack.dev.js",

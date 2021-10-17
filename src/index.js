@@ -80,13 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false
     }
   })
-  // content field
-  const $contentField = document.querySelector('#quote-bg .card .card-content')
-  $contentField.addEventListener('input', function (e) {
-    const content = e.target.textContent.trim()
-    const appInstance = new App('_', content, '_', '_', '_')
-    appInstance.persistQuoteTextToLocalStorage()
-  })
+  
 
   //  sidenav
   const asideElement = document.querySelector('aside')
