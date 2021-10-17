@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(local_data)
     // setBg from localStorage
     UI.backgroundColor(local_data[0])
-    UI.setQuoteText(local_data[2])
+    UI.setQuoteText(local_data[2] || "Click here to edit")
     UI.textColor(local_data[1])
     UI.selectAPhoto(local_data[3])
     UI.setFontStyles(local_data[4])
@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeSideNav()
     } else if (e.target.matches('#board-width')) {
       UI.resetAndPersistWidthAndHeight(e.target.value, '')
+    
     } else if (e.target.matches('#board-height')) {
       UI.resetAndPersistWidthAndHeight('', e.target.value)
     } else if (e.target.matches('#next-photo-btn')) {

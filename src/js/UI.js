@@ -29,7 +29,7 @@ class UI {
   static backgroundColor(color) {
     const $quoteBg = document.getElementById("quote-bg");
     if (color !== "") {
-      $quoteBg.style.backgroundColor = color;
+      $quoteBg.style.background = color;
     }
   }
 
@@ -40,10 +40,10 @@ class UI {
   
   static resetAndPersistWidthAndHeight(wt , ht) {
     const $quoteBg = document.getElementById("quote-bg");
-    document.getElementById("board-height").value = ht;
-    document.getElementById("board-width").value = wt;
     $quoteBg.style.height = ht + "px";
     $quoteBg.style.width = wt + "px";
+    document.querySelector("#board-height").value = parseInt(ht,10);
+    document.querySelector("#board-width").value = parseInt(wt,10);;
   }
 
   static setFontStyles(fontStyles) {
@@ -82,7 +82,12 @@ class UI {
     const appInstance = new App("_","_","_",photo,"_");
     appInstance.persistImageToLocalStorage()
     const $quoteBg = document.getElementById("quote-bg");
-    $quoteBg.style.backgroundImage=`url(${photo})`
+    $quoteBg.style.background=`url(${photo})`
+    $quoteBg.style.backgroundRepeat=`no-repeat`
+    $quoteBg.style.backgroundPosition=`center center`
+    $quoteBg.style.backgroundSize=`cover`
+    
+
 
   }
 }
