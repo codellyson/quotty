@@ -33,12 +33,6 @@ const UI = (function () {
   }
   const resizePlayground = (width, height) => {
     const $playground = document.querySelector('.box')
-    if (width === '') {
-      $playground.style.width = '400px'
-    }
-    if (height === '') {
-      $playground.style.height = '400px'
-    }
     $playground.style.width = width + 'px'
     $playground.style.height = height + 'px'
   }

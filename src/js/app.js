@@ -32,12 +32,15 @@ const app = (function () {
     localStorage.setItem('quote-generator', JSON.stringify(localData))
   }
   const screenShot = (node, width, height) => {
+    console.log('screenShot', node, width, height)
+
     html2canvas(node, {
-      allowTaint: true,
+      allowTaint: false,
       useCORS: true,
       scale: 2,
-      width,
-      height,
+      // width,
+      // height,
+      // foreignObjectRendering: true,
       onclone: (clonedNode) => {
         alert('Done')
       },
