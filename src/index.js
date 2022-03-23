@@ -1,95 +1,122 @@
+import '@/styles/main.scss'
+import app from './js/app'
+import modalFunction from './js/modal'
 import UI from './js/UI'
-import App from './js/app'
-import '@/styles/index.scss'
 
-import { navBarFunc } from './js/miscallenous.es6'
-
-function closeSideNav() {
-  document.querySelector('aside').classList.remove('is-viewed')
-}
-document.addEventListener('DOMContentLoaded', () => {
-  const data = new UI().loadDefaults()
-  if (data) {
-    const local_data = JSON.parse(data)
-    console.log(local_data)
-    // setBg from localStorage
-    UI.backgroundColor(local_data[0])
-    UI.textColor(local_data[1])
-    UI.selectAPhoto(local_data[2])
-    UI.setFontStyles(local_data[3])
+document.addEventListener('click', (e) => {
+  if (e.target.matches('#add-text-modal')) {
+    modalFunction.open('text-modal')
+  }
+  if (e.target.matches('.modal-close')) {
+    modalFunction.close('text-modal')
+    modalFunction.close('photo-modal')
+  }
+  if (e.target.matches('#submit-text')) {
+    // eslint-disable-next-line no-alert
+    UI.setText(document.querySelector('textarea').value.trim())
+    modalFunction.close('text-modal')
+  }
+  if (e.target.matches('#bgimage-btn')) {
+    modalFunction.open('photo-modal')
+    app
+      .fetchImages(1)
+      .then((images) => {
+        UI.displayImages(images)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  if (e.target.matches('.select-photo')) {
+    const imgUrl = e.target.getAttribute('src')
+    UI.selectAPhoto(imgUrl)
+    modalFunction.close('photo-modal')
   }
 
-  // NavBar
-  navBarFunc()
+  if (e.target.matches('#align-left-button')) {
+    UI.alignText('left')
+  }
+  if (e.target.matches('#align-center-button')) {
+    UI.alignText('center')
+  }
+  if (e.target.matches('#align-right-button')) {
+    UI.alignText('right')
+  }
+  if (e.target.matches('#align-justify-button')) {
+    UI.alignText('justify')
+  }
+  if (e.target.matches('#align-vertical-button')) {
+    UI.alignBox('vertical')
+  }
+  if (e.target.matches('#align-horizontal-button')) {
+    UI.alignBox('horizontal')
+  }
+  if (e.target.matches('#align-center-button')) {
+    UI.alignBox('center')
+  }
+  if (e.target.matches('#screenshot-btn')) {
+    app.screenShot(document.getElementById('quote-bg'))
+  }
+  return false
+})
 
-  // Export Image Button
-  const screenShotBtn = document.getElementById('screenshot-btn')
-  screenShotBtn.addEventListener('click', (event) => {
-    const node = document.getElementById('quote-bg')
-    UI.screenShot(node)
-  })
+document.addEventListener('keyup', (e) => {
+  if (e.key === 'Escape') {
+    modalFunction.close('text-modal')
+    modalFunction.close('photo-modal')
+  }
+  const widthElement = document.getElementById('board-width')
+  const heightElement = document.getElementById('board-height')
+  const size = {}
+  if (e.target.matches('#board-width')) {
+    widthElement.value = e.target.value
+    size.width = e.target.value
+    size.height = ''
+  }
+  if (e.target.matches('#board-height')) {
+    heightElement.value = e.target.value
+    size.height = e.target.value
+    size.width = ''
+  }
+  if (Object.keys(size).length > 0) {
+    UI.resizePlayground(size.width, size.height)
+  }
+})
 
-  //  Persisit color  and set color in the LocalStorage
-  document.addEventListener('change', (e) => {
-    if (e.target.matches('#bgcolor-btn')) {
-      UI.backgroundColor(e.target.value)
-      const appInstance = new App(e.target.value)
-      appInstance.persistColorToLocaleStorage()
-      closeSideNav()
-    } else if (e.target.matches('#textcolor-btn')) {
-      UI.textColor(e.target.value)
-      const appInstance = new App('_', e.target.value, '_', '_')
-      appInstance.persistTextColorToLocalStorage()
-      closeSideNav()
-    } else if (e.target.matches('#board-width')) {
-      UI.resetAndPersistWidthAndHeight(e.target.value, '')
-    } else if (e.target.matches('#board-height')) {
-      UI.resetAndPersistWidthAndHeight('', e.target.value)
-    } else if (e.target.matches('#next-photo-btn')) {
-      App.fetchPhotos(e.target.value)
-    } else if (e.target.matches('.font-input')) {
-      const currentSize = e.target.value
-      UI.setFontSize(currentSize)
-      closeSideNav()
+// change Event
+document.addEventListener('change', (e) => {
+  if (e.target.matches('#bgcolor-btn')) {
+    const colorInput = document.getElementById('bgcolor-btn')
+    UI.addBgColor(colorInput.value)
+  }
+  if (e.target.matches('#textcolor-btn')) {
+    const colorInput = document.getElementById('textcolor-btn')
+    UI.addTextColor(colorInput.value)
+  }
+  if (e.target.matches('#more-button')) {
+    modalFunction.open('photo-modal')
+    app
+      // eslint-disable-next-line no-plusplus
+      .fetchImages(e.target.value)
+      .then((images) => {
+        UI.displayImages(images)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+    // console.log(one)
+  }
+  if (e.target.matches('#font-size-input')) {
+    UI.changeTextSize(e.target.value)
+  }
+
+  if (e.target.matches('#font-family-input')) {
+    UI.changeTextFont(e.target.value)
+  }
+  if (e.target.matches('#default-size')) {
+    if (e.target.checked) {
+      UI.resizePlayground(400, 400)
     }
-  })
-
-  // set hght and width
-  document.addEventListener('click', (e) => {
-    if (e.target.matches('#bgimage-btn')) {
-      App.fetchPhotos(1)
-    } else if (e.target.matches('.font-style')) {
-      const fontStyles = e.target.textContent.trim().toLowerCase()
-      UI.setFontStyles(fontStyles)
-      const appInstance = new App('_', '_', '_', fontStyles)
-      appInstance.persistFontStyleToLocalStorage()
-      closeSideNav()
-      document.querySelector('.dropdown').classList.toggle('is-active')
-    }
-  })
-
-  document.addEventListener('click', function (e) {
-    if (e.target.matches('.select-photos')) {
-      const imgUrl = e.target.getAttribute('src')
-      UI.selectAPhoto(imgUrl)
-      // document.querySelector('.modal').classList.remove('is-active')
-      closeSideNav()
-    } else if (e.target.matches('#trigger-btn')) {
-      document.querySelector('.dropdown').classList.toggle('is-active')
-    } else {
-      return false
-    }
-  })
-  
-
-  //  sidenav
-  const asideElement = document.querySelector('aside')
-  const toggleSideBarBtn = document.getElementById('tool-toggle')
-  toggleSideBarBtn.addEventListener('click', function (e) {
-    if (asideElement.classList.contains('is-viewed')) {
-      asideElement.classList.remove('is-viewed')
-    } else {
-      asideElement.classList.add('is-viewed')
-    }
-  })
+  }
+  return false
 })

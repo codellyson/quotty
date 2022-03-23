@@ -1,89 +1,129 @@
-'use strict'
 /**
 @Author {Isiaka Lukman Bamidele}
 @Copyright {Dellyson Inc.}
 */
-import domtoimage from "dom-to-image";
-import { saveAs } from "file-saver";
-import App from './app'
-class UI extends App {
-  loadDefaults() {
-    if (localStorage.getItem("quote-generator")) {
-      return localStorage.getItem("quote-generator");
-    } else {
-      localStorage.setItem("quote-generator", JSON.stringify(this.quoteData));
-    }
-  }
-  static screenShot(node) {
-    // setTimeout(() => {
-    domtoimage.toBlob(node).then(function (dataurl) {
-      saveAs(dataurl, "quote1.png");
-    });
-    // }, 100);
-  }
 
-  static backgroundColor(color) {
-    const $quoteBg = document.getElementById("quote-bg");
-    if (color !== "") {
-      $quoteBg.style.background = color;
-    }
-  }
+import html2canvas from 'html2canvas'
+import app from './app'
 
-  static textColor(color) {
-    const $textContainer = document.querySelector("#quote-bg .card .card-content");
-    if (color !== " ") {$textContainer.style.color = color;}
-  }
-  
-  static resetAndPersistWidthAndHeight(wt , ht) {
-    const $quoteBg = document.getElementById("quote-bg");
-    $quoteBg.style.height = ht + "px";
-    $quoteBg.style.width = wt + "px";
-    document.querySelector("#board-height").value = parseInt(ht,10);
-    document.querySelector("#board-width").value = parseInt(wt,10);;
-  }
-
-  static setFontStyles(fontStyles) {
-    const $content = document.querySelector("#quote-bg .card .card-content");
-    $content.style.fontFamily = fontStyles;
-    }
-  static setFontSize(fontSize) {
-    const $content = document.querySelector("#quote-bg .card .card-content");
-    $content.style.fontSize = fontSize + "px";
-    document.querySelector(".font-input").value=fontSize
-  }
-
-  
-  static renderPhotos(photos) {
-    const photolist = photos.map((photo) => {
-      return `
+// eslint-disable-next-line func-names
+const UI = (function () {
+  const renderPhotos = (photos) => {
+    const photolist = photos.map(
+      (photo) => `
           <img class="photos select-photos mr-2" style="width:50%" src=${photo.urls.regular} />
-      `;
-    });
-    document.querySelector(".modal-content").innerHTML = ` ${photolist.join(
-      ""
-    )} 
+      `
+    )
+    document.querySelector('.modal-content').innerHTML = ` ${photolist.join('')}
       <div class="control">
-      <input class="input is-small is-primary" id="next-photo-btn" type="number"/>
-      <p>page</p>
+      <input class="input is-small is-primary" id="next-photo-btn" type="number" title="next image page"/>
       </div>
       </div>
-      `;
-    document.querySelector(".modal").addEventListener("click", () => {
-      document.querySelector(".modal").classList.remove("is-active");
-    });
+      `
+    document.querySelector('.modal').addEventListener('click', () => {
+      document.querySelector('.modal').classList.remove('is-active')
+    })
   }
-  static selectAPhoto(photo) {
-    const appInstance = new App("_","_",photo,"_");
-    appInstance.persistImageToLocalStorage()
-    const $quoteBg = document.getElementById("quote-bg");
-    $quoteBg.style.background=`url(${photo})`
-    $quoteBg.style.backgroundRepeat=`no-repeat`
-    $quoteBg.style.backgroundPosition=`center center`
-    $quoteBg.style.backgroundSize=`cover`
-    
-
-
+  const selectAPhoto = (photo) => {
+    const $playground = document.querySelector('.box')
+    $playground.style.background = `url(${photo})`
+    $playground.style.backgroundRepeat = `no-repeat`
+    $playground.style.backgroundPosition = `center center`
+    $playground.style.backgroundSize = `cover`
   }
-}
+  const resizePlayground = (width, height) => {
+    const $playground = document.querySelector('.box')
+    if (width === '') {
+      $playground.style.width = '400px'
+    }
+    if (height === '') {
+      $playground.style.height = '400px'
+    }
+    $playground.style.width = width + 'px'
+    $playground.style.height = height + 'px'
+  }
+  function setText(text) {
+    const $textContainer = document.querySelector('#text-container')
+    $textContainer.innerHTML = text
+  }
 
-export default UI;
+  function generateArrayofHexColorCodes(color) {
+    const colorArray = []
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < color.length; i++) {
+      colorArray.push(color[i].hex)
+    }
+    return colorArray
+  }
+
+  function displayVariousColor() {
+    console.log('displayVariousColor', generateArrayofHexColorCodes())
+  }
+  function addBgColor(color) {
+    const $playground = document.querySelector('.box')
+    $playground.style.backgroundColor = color
+  }
+  function addTextColor(color) {
+    const $textContainer = document.querySelector('#text-container')
+    $textContainer.style.color = color
+  }
+  function changeTextSize(size) {
+    const $textContainer = document.querySelector('#text-container')
+    $textContainer.style.fontSize = size + 'px'
+  }
+  function changeTextFont(font) {
+    const $textContainer = document.querySelector('#text-container')
+    $textContainer.style.fontFamily = font
+  }
+  function alignText(align) {
+    const $textContainer = document.querySelector('#text-container')
+    $textContainer.style.textAlign = align
+  }
+  function alignBox(positionAlign) {
+    const $playground = document.querySelector('.box')
+    $playground.style.display = 'flex'
+    $playground.style.flexDirection = 'column'
+
+    switch (positionAlign) {
+      case 'center':
+        $playground.style.justifyContent = 'center'
+        break
+      case 'vertical':
+        $playground.style.justifyContent = 'flex-start'
+        break
+      case 'horizontal':
+        $playground.style.justifyContent = 'flex-end'
+        break
+      default:
+        $playground.style.justifyContent = 'center'
+    }
+  }
+  function displayImages(images) {
+    if (images.length > 0) {
+      const photolist = images.map(
+        (image) =>
+          `  <img class="photos select-photo" style="width:50%" src=${image.urls.regular} /> `
+      )
+      document.querySelector('.image-modal-content').innerHTML = ` ${photolist.join('')}`
+    } else {
+      document.querySelector(
+        '.image-modal-content'
+      ).innerHTML = ` <p style="text-align:center"> Loading please wait... </p>`
+    }
+  }
+  return {
+    renderPhotos,
+    selectAPhoto,
+    setText,
+    resizePlayground,
+    displayVariousColor,
+    addBgColor,
+    addTextColor,
+    displayImages,
+    changeTextSize,
+    changeTextFont,
+    alignText,
+    alignBox,
+  }
+})()
+export default UI

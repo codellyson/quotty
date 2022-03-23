@@ -1,89 +1,59 @@
-'use strict'
+// 'use strict'
 /**
 @Author {Isiaka Lukman Bamidele}
 @Copyright {Dellyson Inc.}
 */
+import html2canvas from 'html2canvas'
+import localDB from './localStorage'
+
 const unsplashAccessKey = 'uWgEsu7J_S1wB1CZ_nm1GrLwsI71A-cdvMFoRiy21nE'
-const unsplashUrl = 'https://api.unsplash.com/photos?orientation=landscape&per_page=30'
-import UI from './UI'
-class APP {
-  constructor(bgColor, textColor, quoteImg, fontStyle) {
-    this.bgColor = bgColor
-    this.textColor = textColor
-    this.fontStyle = fontStyle
-    this.quoteImg = quoteImg
-    this.quoteData = ["#000000","#ffffff","acknowledgement", null]
-  }
-  static fetchPhotos(page) {
-    fetch(unsplashUrl + '&' + 'page=' + page, {
-      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+const unsplashUrl = 'https://api.unsplash.com/photos?orientation=landscape&per_page=10'
+
+// eslint-disable-next-line func-names
+const app = (function () {
+  const fetchImages = (page) => {
+    const images = fetch(`${unsplashUrl}&page=${page}`, {
+      method: 'GET',
       headers: {
         Authorization: `Client-ID ${unsplashAccessKey} `,
       },
     })
       .then((response) => response.json())
-      .then((data) => {
-        this.loading = false
-        document.querySelector('.modal').classList.add('is-active')
-        UI.renderPhotos(data)
-        document.getElementById('next-photo-btn').value = page
-      })
-      .catch((err) => {
-        this.loading = false
-        console.error(err)
-      })
+      .then((data) => data)
+      .catch((err) => err)
+    document.querySelector(
+      '.image-modal-content'
+    ).innerHTML = ` <p style="text-align:center"> Loading please wait... </p>`
+    return images
   }
-
-  persistColorToLocaleStorage() {
-    if (this.color !== '') {
-      const local_data = JSON.parse(new UI().loadDefaults())
-      this.quoteData[0] = this.bgColor
-      this.quoteData[1] = local_data[1]
-      this.quoteData[2] = local_data[2]
-      this.quoteData[3] = local_data[3]
-    }
-    if (localStorage.getItem('quote-generator')) {
-      localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
-    }
+  const persistImageToLocalStorage = (imageUrl) => {
+    const localData = JSON.parse(localDB.get('quote-generator'))
+    localData[2] = imageUrl
+    localStorage.setItem('quote-generator', JSON.stringify(localData))
   }
-
-  persistTextColorToLocalStorage() {
-    const local_data = JSON.parse(new UI().loadDefaults())
-    if (this.textColor !== '' && typeof this.textColor !== '') {
-      this.quoteData[0] = local_data[0]
-      this.quoteData[1] = this.textColor
-      this.quoteData[2] = local_data[2]
-      this.quoteData[3] = local_data[3]
-      if (localStorage.getItem('quote-generator')) {
-        localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
-      }
-    }
+  const screenShot = (node, width, height) => {
+    html2canvas(node, {
+      allowTaint: true,
+      useCORS: true,
+      scale: 2,
+      width,
+      height,
+      onclone: (clonedNode) => {
+        alert('Done')
+      },
+    }).then((canvas) => {
+      const link = document.createElement('a')
+      document.body.appendChild(link)
+      link.download = 'file.png'
+      link.href = canvas.toDataURL()
+      link.target = '_blank'
+      link.click()
+    })
   }
-
-  persistImageToLocalStorage() {
-    if (this.quoteImg !== '') {
-      const local_data = JSON.parse(new UI().loadDefaults())
-      this.quoteData[0] = local_data[0]
-      this.quoteData[1] = local_data[1]
-      this.quoteData[2] = this.quoteImg
-      this.quoteData[3] = local_data[3]
-      if (localStorage.getItem('quote-generator')) {
-        localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
-      }
-    }
+  return {
+    fetchImages,
+    persistImageToLocalStorage,
+    screenShot,
   }
-  persistFontStyleToLocalStorage() {
-    console.log(this.fontStyle)
-    if (!this.fontStyle !== '') {
-      const local_data = JSON.parse(new UI().loadDefaults())
-      this.quoteData[0] = local_data[0]
-      this.quoteData[1] = local_data[1]
-      this.quoteData[2] = local_data[2]
-      this.quoteData[3] = this.fontStyle
-    }
-    if (localStorage.getItem('quote-generator')) {
-      localStorage.setItem('quote-generator', JSON.stringify(this.quoteData))
-    }
-  }
-}
-export default APP
+})()
+export default app
